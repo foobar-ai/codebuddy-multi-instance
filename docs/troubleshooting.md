@@ -92,6 +92,15 @@ lsregister -f -R "/Applications/CodeBuddy CN.app"
 
 setup 脚本已内置此步（克隆后立即 `plutil -remove CFBundleURLTypes`）。
 
+⚠️ **关键补充**：删除 Info.plist 声明后，必须 `lsregister -f` **副本自身**刷新 LaunchServices 数据库——只重注册主 app 不够，LS 数据库会残留副本的旧 `claimed schemes:`，且副本作为最近注册者仍会被选为默认处理器。验证方式：
+
+```bash
+lsregister -dump 2>/dev/null | grep -A80 "com.tencent.codebuddycn.alt2" | grep "claimed schemes"
+# 无输出 = 副本协议 claim 已清除
+```
+
+**浏览器层缓存**：若此前在浏览器弹窗点过「始终允许」，浏览器会记住该站点协议的放行记录。系统修复后需重启浏览器（或用无痕窗口）再测；仍弹副本则到浏览器「站点设置」重置该网站权限。
+
 ### 坑 3.3 · LSEnvironment 合并而非覆盖
 
 CodeBuddy CN 的 `Info.plist` 里 `LSEnvironment` 已有系统默认项 `MallocNanoZone=0`。用 `plutil -replace LSEnvironment -string ...` 整体覆盖会把它冲掉。
