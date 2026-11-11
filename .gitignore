@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+
+# CodeBuddy IDE 项目本地数据（计划/历史等，不提交）
+.codebuddy/
+
+# 脚本运行产生的临时文件
+*.bak
+*.orig
+/tmp/
